@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ArtistEntity } from './artist.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,7 +12,11 @@ export class ArtistService {
   ) {}
 
   async showAll() {
-    return await this.artistRepository.find();
+    const idea = await this.artistRepository.find();
+    if (!idea) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+    return idea;
   }
 
   async create(data: ArtistDTO) {
@@ -26,12 +30,21 @@ export class ArtistService {
   }
 
   async update(id: string, data: Partial<ArtistDTO>) {
+    let idea = await this.artistRepository.findOne({ where: { id } });
+    if (!idea) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
     await this.artistRepository.update({ id }, data);
-    return await this.artistRepository.findOne({ id });
+    idea = await this.artistRepository.findOne({ where: { id } });
+    return idea;
   }
 
   async destroy(id: string) {
+    const idea = await this.artistRepository.findOne({ where: { id } });
+    if (!idea) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
     await this.artistRepository.delete({ id });
-    return { deleted: true };
+    return idea;
   }
 }
