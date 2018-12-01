@@ -12,11 +12,11 @@ export class ArtistService {
   ) {}
 
   async showAll() {
-    const idea = await this.artistRepository.find();
-    if (!idea) {
+    const artist = await this.artistRepository.find();
+    if (!artist) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
-    return idea;
+    return artist;
   }
 
   async create(data: ArtistDTO) {
@@ -30,13 +30,13 @@ export class ArtistService {
   }
 
   async update(id: string, data: Partial<ArtistDTO>) {
-    let idea = await this.artistRepository.findOne({ where: { id } });
-    if (!idea) {
+    let artist = await this.artistRepository.findOne({ where: { id } });
+    if (!artist) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
     await this.artistRepository.update({ id }, data);
-    idea = await this.artistRepository.findOne({ where: { id } });
-    return idea;
+    artist = await this.artistRepository.findOne({ where: { id } });
+    return artist;
   }
 
   async destroy(id: string) {

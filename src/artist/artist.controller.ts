@@ -15,7 +15,7 @@ import { ValidationPipe } from '../shared/validation.pipe';
 
 @Controller('api/artists')
 export class ArtistController {
-  private logger = new Logger('IdeaController');
+  private logger = new Logger('ArtistController');
 
   constructor(private artistService: ArtistService) {}
 

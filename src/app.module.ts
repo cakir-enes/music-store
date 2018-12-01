@@ -7,9 +7,10 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpErrorFilter } from './shared/http-error.filter';
 import { LoggingInterceptor } from './shared/logging.interceptor';
 import { UserModule } from './user/user.module';
+import { SongModule } from './song/song.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), ArtistModule, UserModule],
+  imports: [TypeOrmModule.forRoot(), ArtistModule, UserModule, SongModule],
   controllers: [AppController],
   providers: [
     AppService,
