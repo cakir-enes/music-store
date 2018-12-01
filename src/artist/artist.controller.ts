@@ -13,7 +13,7 @@ import { ArtistService } from './artist.service';
 import { ArtistDTO } from './artist.dto';
 import { ValidationPipe } from '../shared/validation.pipe';
 
-@Controller('artist')
+@Controller('api/artists')
 export class ArtistController {
   private logger = new Logger('IdeaController');
 
