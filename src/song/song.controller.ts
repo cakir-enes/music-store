@@ -22,10 +22,15 @@ export class SongController {
     return this.songService.showAll();
   }
 
-  @Post()
+  @Get('album/:id')
+  showByAlbum(@Param('id') albumId) {
+    return this.songService.showByAlbum(albumId);
+  }
+
+  @Post('album/:id')
   @UsePipes(new ValidationPipe())
-  createSong(@Body() data: SongDTO) {
-    return this.songService.create(data);
+  createSong(@Param('id') albumId, @Body() data: SongDTO) {
+    return this.songService.create(albumId, data);
   }
 
   @Get(':id')

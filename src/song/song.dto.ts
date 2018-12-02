@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsCurrency } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 
 export class SongDTO {
   @IsString()
@@ -6,10 +6,4 @@ export class SongDTO {
 
   @IsNumber()
   length: number;
-
-  @IsString()
-  album: string;
-
-  @IsNumber()
-  price: number;
 }

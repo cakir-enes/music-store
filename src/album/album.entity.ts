@@ -4,8 +4,10 @@ import {
   Column,
   ManyToMany,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { ArtistEntity } from 'src/artist/artist.entity';
+import { SongEntity } from 'src/song/song.entity';
 
 @Entity('album')
 export class AlbumEntity {
@@ -24,6 +26,11 @@ export class AlbumEntity {
   @Column('decimal')
   length: number;
 
-  @ManyToOne(type => ArtistEntity, artist => artist.albums)
+  @ManyToOne(type => ArtistEntity, artist => artist.albums, {
+    onDelete: 'CASCADE',
+  })
   artist: ArtistEntity;
+
+  @OneToMany(type => SongEntity, song => song.album, { cascade: true })
+  songs: SongEntity[];
 }

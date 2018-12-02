@@ -20,16 +20,24 @@ export class AlbumService {
   ) {}
 
   async showByArtist(artistId: string) {
-    const albums = await this.albumRepository
-      .createQueryBuilder('album')
-      .leftJoin('album.artist', 'artist')
-      .getMany();
-    return albums;
+    const artist = await this.artistRepository
+      .findOneOrFail({
+        where: { id: artistId },
+      })
+      .catch(() => {
+        throw new HttpException('Cant find artist', HttpStatus.BAD_REQUEST);
+      });
+    const albums = await this.albumRepository.find({
+      where: { artist: { id: artistId } },
+    });
+    return { artist, albums };
   }
 
   async showAll() {
-    const album = await this.albumRepository.find({ relations: ['artist'] });
-    return album;
+    const albums = await this.artistRepository.find({
+      relations: ['albums'],
+    });
+    return albums;
   }
 
   async create(artistId: string, data: AlbumDTO) {
