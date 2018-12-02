@@ -8,9 +8,10 @@ import { HttpErrorFilter } from './shared/http-error.filter';
 import { LoggingInterceptor } from './shared/logging.interceptor';
 import { UserModule } from './user/user.module';
 import { SongModule } from './song/song.module';
+import { AlbumModule } from './album/album.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), ArtistModule, UserModule, SongModule],
+  imports: [TypeOrmModule.forRoot(), ArtistModule, UserModule, SongModule, AlbumModule],
   controllers: [AppController],
   providers: [
     AppService,
