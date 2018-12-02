@@ -1,18 +1,16 @@
 import {
   Injectable,
-  PipeTransform,
   ArgumentMetadata,
-  BadRequestException,
-  HttpStatus,
+  PipeTransform,
   HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import { validate, ValidationError } from 'class-validator';
+import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
-import { ObjectUnsubscribedError } from 'rxjs';
 
 @Injectable()
 export class ValidationPipe implements PipeTransform {
-  transform(value: any, metadata: ArgumentMetadata) {
+  async transform(value: any, metadata: ArgumentMetadata) {
     if (value instanceof Object && this.isEmpty(value)) {
       throw new HttpException(
         'Validation failed: No body submitted',
@@ -23,25 +21,23 @@ export class ValidationPipe implements PipeTransform {
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
-
     const object = plainToClass(metatype, value);
-    validate(object).then(errors => {
-      if (errors.length > 0) {
-        throw new HttpException(
-          `Validation failed: ${this.formatErrors(errors)}`,
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-    });
+    const errors = await validate(object);
+    if (errors.length > 0) {
+      throw new HttpException(
+        `Validation failed: ${this.formatErrors(errors)}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return value;
   }
 
   private toValidate(metatype): boolean {
-    const types = [String, Boolean, Number, Array, Object, Date];
+    const types = [String, Boolean, Number, Array, Object];
     return !types.find(type => metatype === type);
   }
 
-  private formatErrors(errors: ValidationError[]) {
+  private formatErrors(errors: any[]) {
     return errors
       .map(err => {
         for (let property in err.constraints) {

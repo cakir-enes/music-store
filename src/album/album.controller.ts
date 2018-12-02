@@ -4,7 +4,6 @@ import {
   Get,
   Post,
   UsePipes,
-  ValidationPipe,
   Body,
   Param,
   Put,
@@ -12,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { AlbumDTO } from 'src/Album/Album.dto';
+import { ValidationPipe } from 'src/shared/validation.pipe';
 
 @Controller('api/albums')
 export class AlbumController {
@@ -22,10 +22,15 @@ export class AlbumController {
     return this.albumService.showAll();
   }
 
-  @Post()
+  @Get('artist/:id')
+  showAlbumsByArtist(@Param('id') artistId: string) {
+    return this.albumService.showByArtist(artistId);
+  }
+
+  @Post('artist/:id')
   @UsePipes(new ValidationPipe())
-  createAlbum(@Body() data: AlbumDTO) {
-    return this.albumService.create(data);
+  createAlbum(@Param('id') artistId: string, @Body() data: AlbumDTO) {
+    return this.albumService.create(artistId, data);
   }
 
   @Get(':id')

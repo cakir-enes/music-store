@@ -1,50 +1,78 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AlbumEntity } from './album.entity';
 import { Repository } from 'typeorm';
 import { AlbumDTO } from './album.dto';
+import { ArtistEntity } from 'src/artist/artist.entity';
 
 @Injectable()
 export class AlbumService {
   constructor(
     @InjectRepository(AlbumEntity)
-    private AlbumRepository: Repository<AlbumEntity>,
+    private albumRepository: Repository<AlbumEntity>,
+    @InjectRepository(ArtistEntity)
+    private artistRepository: Repository<ArtistEntity>,
   ) {}
 
-  async showAll() {
-    const Album = await this.AlbumRepository.find();
-    if (!Album) {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    }
-    return Album;
+  async showByArtist(artistId: string) {
+    const albums = await this.albumRepository
+      .createQueryBuilder('album')
+      .leftJoin('album.artist', 'artist')
+      .getMany();
+    return albums;
   }
 
-  async create(data: AlbumDTO) {
-    const Album = await this.AlbumRepository.create(data);
-    await this.AlbumRepository.save(Album);
-    return Album;
+  async showAll() {
+    const album = await this.albumRepository.find({ relations: ['artist'] });
+    return album;
+  }
+
+  async create(artistId: string, data: AlbumDTO) {
+    const artist = await this.artistRepository.findOne({
+      where: { id: artistId },
+    });
+    if (!artist) {
+      throw new BadRequestException('Cant create Album: Artist not found!');
+    }
+    const album = await this.albumRepository.create({ ...data, artist });
+    await this.albumRepository.save(album);
+    return album;
   }
 
   async read(id: string) {
-    return await this.AlbumRepository.findOne({ where: { id } });
+    return await this.albumRepository.findOne({
+      where: { id },
+      relations: ['artist'],
+    });
   }
 
   async update(id: string, data: Partial<AlbumDTO>) {
-    let Album = await this.AlbumRepository.findOne({ where: { id } });
-    if (!Album) {
-      throw new HttpException('Album Not Found', HttpStatus.NOT_FOUND);
+    let album = await this.albumRepository.findOne({ where: { id } });
+    if (!album) {
+      throw new HttpException('album Not Found', HttpStatus.NOT_FOUND);
     }
-    await this.AlbumRepository.update({ id }, data);
-    Album = await this.AlbumRepository.findOne({ where: { id } });
-    return Album;
+    await this.albumRepository.update({ id }, data);
+    album = await this.albumRepository.findOne({
+      where: { id },
+      relations: ['artist'],
+    });
+    return album;
   }
 
   async destroy(id: string) {
-    const Album = await this.AlbumRepository.findOne({ where: { id } });
-    if (!Album) {
+    const album = await this.albumRepository.findOne({
+      where: { id },
+      relations: ['artist'],
+    });
+    if (!album) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
-    await this.AlbumRepository.delete({ id });
-    return Album;
+    await this.albumRepository.delete({ id });
+    return album;
   }
 }

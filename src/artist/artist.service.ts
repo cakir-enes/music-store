@@ -13,9 +13,6 @@ export class ArtistService {
 
   async showAll() {
     const artist = await this.artistRepository.find();
-    if (!artist) {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    }
     return artist;
   }
 
