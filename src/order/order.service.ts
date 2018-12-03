@@ -42,6 +42,9 @@ export class OrderService {
       .catch(() => {
         throw new HttpException('Cant find user', HttpStatus.BAD_REQUEST);
       });
+    if (data.albums.length == 0) {
+      throw new HttpException('Albums cant be empty', HttpStatus.BAD_REQUEST);
+    }
     const albums = await this.albumRepository.find({
       where: { id: In(data.albums) },
     });
@@ -51,6 +54,14 @@ export class OrderService {
 
     const order = await this.orderRepository.create({ user, albums });
     await this.orderRepository.save(order);
+    return order;
+  }
+
+  async read(id: string) {
+    const order = await this.orderRepository.find({
+      where: { id },
+      relations: ['user', 'albums'],
+    });
     return order;
   }
 }

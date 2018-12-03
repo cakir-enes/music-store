@@ -1,7 +1,17 @@
-import { Controller, Get, Param, Post, UsePipes, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  UsePipes,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
 import { OrderService } from './order.service';
 import { ValidationPipe } from 'src/shared/validation.pipe';
 import { OrderDTO } from './order.dto';
+import { AuthGuard } from 'src/shared/auth.guard';
+import { User } from 'src/user/user.decorator';
 
 @Controller('api/orders')
 export class OrderController {
@@ -17,14 +27,16 @@ export class OrderController {
     return this.orderService.showByUser(userid);
   }
 
-  // @Get(':id')
-  // readOrder(@Param('id') id) {
-  //     return this.orderService.read(id);
-  // }
+  @Get(':id')
+  readOrder(@Param('id') id) {
+    return this.orderService.read(id);
+  }
 
-  @Post('user/:id')
+  @Post()
+  @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())
-  createOrder(@Param('id') userId, @Body() data: OrderDTO) {
+  createOrder(@User('id') userId, @Body() data: OrderDTO) {
+    console.log('id ' + userId);
     return this.orderService.create(userId, data);
   }
 }
