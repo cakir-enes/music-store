@@ -12,9 +12,6 @@ export class ArtistEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @CreateDateColumn()
-  created: Date;
-
   @Column('text')
   name: string;
 

@@ -17,6 +17,9 @@ export class AlbumEntity {
   @Column('text')
   name: string;
 
+  @Column('text')
+  genre: string;
+
   @Column('money')
   price: number;
 
@@ -27,7 +30,7 @@ export class AlbumEntity {
   length: number;
 
   @Column('text')
-  genre: string;
+  link: string;
 
   @ManyToOne(type => ArtistEntity, artist => artist.albums, {
     onDelete: 'CASCADE',
