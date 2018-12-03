@@ -26,6 +26,9 @@ export class AlbumEntity {
   @Column('decimal')
   length: number;
 
+  @Column('text')
+  genre: string;
+
   @ManyToOne(type => ArtistEntity, artist => artist.albums, {
     onDelete: 'CASCADE',
   })

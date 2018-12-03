@@ -7,6 +7,9 @@ export class AlbumDTO {
   @IsNumber()
   length: number;
 
+  @IsString()
+  genre: string;
+
   @IsNumber()
   price: number;
 
