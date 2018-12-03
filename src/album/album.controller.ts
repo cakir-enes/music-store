@@ -24,7 +24,6 @@ export class AlbumController {
 
   @Get('artist/:id')
   showAlbumsByArtist(@Param('id') artistId: string) {
-    // return this.albumService.showByArtist(artistId);
     return this.albumService.showByArtist(artistId);
   }
 

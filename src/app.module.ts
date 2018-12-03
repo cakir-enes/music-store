@@ -9,9 +9,10 @@ import { LoggingInterceptor } from './shared/logging.interceptor';
 import { UserModule } from './user/user.module';
 import { SongModule } from './song/song.module';
 import { AlbumModule } from './album/album.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), ArtistModule, UserModule, SongModule, AlbumModule],
+  imports: [TypeOrmModule.forRoot(), ArtistModule, UserModule, SongModule, AlbumModule, OrderModule],
   controllers: [AppController],
   providers: [
     AppService,
