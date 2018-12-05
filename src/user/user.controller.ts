@@ -13,11 +13,11 @@ import { AuthGuard } from 'src/shared/auth.guard';
 import { userInfo } from 'os';
 import { User } from './user.decorator';
 
-@Controller()
+@Controller('/api/auth')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('api/users')
+  @Get('users')
   showAllUsers(@User() user) {
     return this.userService.showAll();
   }

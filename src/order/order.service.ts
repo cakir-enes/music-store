@@ -51,7 +51,8 @@ export class OrderService {
     if (albums.length != data.albums.length) {
       throw new HttpException('Wrong album id', HttpStatus.BAD_REQUEST);
     }
-
+    console.log('LOGG\n');
+    albums.forEach(x => console.log(x));
     const order = await this.orderRepository.create({ user, albums });
     await this.orderRepository.save(order);
     return order;

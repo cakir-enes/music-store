@@ -1,9 +1,9 @@
-import { IsString, IsDate } from 'class-validator';
+import { IsString, IsDate, IsNotEmpty } from 'class-validator';
 
 export class ArtistDTO {
   @IsString()
   name: string;
 
-  @IsDate()
+  @IsNotEmpty()
   foundingDate: Date;
 }

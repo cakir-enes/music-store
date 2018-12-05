@@ -55,7 +55,7 @@ export class AlbumService {
   async read(id: string) {
     return await this.albumRepository.findOne({
       where: { id },
-      relations: ['artist'],
+      relations: ['artist', 'songs'],
     });
   }
 

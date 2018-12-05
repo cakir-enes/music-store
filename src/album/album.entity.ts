@@ -36,4 +36,7 @@ export class AlbumEntity {
 
   @OneToMany(type => SongEntity, song => song.album, { cascade: true })
   songs: SongEntity[];
+
+  @Column('text')
+  coverUrl: string;
 }

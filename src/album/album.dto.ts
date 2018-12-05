@@ -15,4 +15,7 @@ export class AlbumDTO {
 
   @IsNumber()
   date: number;
+
+  @IsString()
+  coverUrl: string;
 }
