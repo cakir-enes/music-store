@@ -61,7 +61,7 @@ export class OrderService {
   async read(id: string) {
     const order = await this.orderRepository.find({
       where: { id },
-      relations: ['user', 'albums'],
+      relations: ['user', 'albums', 'albums.songs'],
     });
     return order;
   }
